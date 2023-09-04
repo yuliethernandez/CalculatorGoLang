@@ -44,7 +44,10 @@ func main() {
 						fmt.Print("Enter the second number: ")
 						fmt.Scan(&b)
 						if !isFinish(strconv.Itoa(b)) {
-							fmt.Println(a, " - ", b, " = ", substraccion(a, b))
+							subs := func() int { //closure or anonymus function
+								return a - b
+							}
+							fmt.Println(a, " - ", b, " = ", subs())
 						} else {
 							goto FINAL_STATEMENT
 						}
@@ -125,13 +128,10 @@ func main() {
 						break
 					}
 				}
-
 			}
-
 		} else {
 			goto FINAL_STATEMENT
 		}
-
 	}
 FINAL_STATEMENT:
 	fmt.Print("Program finished!")
@@ -142,22 +142,26 @@ func isFinish(val string) bool {
 		return true
 	}
 	return false
-
 }
 
-func add(a, b int) int {
-	return a + b
+func add(a, b int) (c int) {
+	c = a + b
+	return
 }
 
-func substraccion(a, b int) int {
-	return a - b
-}
-
-func multiply(a, b int) (c int) {
+func multiply(a, b int) int {
 	return a * b
 }
 
 func division(a, b int) int {
+	// Use this deferred function to handle errors.
+	defer func() {
+		if err := recover(); err != nil {
+			fmt.Println("ERROR!!!!")
+			fmt.Println(err)
+		}
+	}()
+	// Cause an error ... Go will run the defer func above.
 	return int(a / b)
 }
 
